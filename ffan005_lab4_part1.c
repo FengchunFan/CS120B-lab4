@@ -14,7 +14,7 @@
 #endif
 
 // I feel this is very much like #3 in the in-class exercise, and I will borrow the template
-enum States {onPress, onRelease, offPress, offRelease, Start} state;
+enum States {offRelease, onPress, onRelease, offPress, Start} state;
 
 void Tick(){
   switch(state){
@@ -69,7 +69,6 @@ void Tick(){
     break;
     
    case onRelease:
-    PORTB = 0x02;
     break;
     
    case offPress:
@@ -77,7 +76,6 @@ void Tick(){
     break;
  
    case offRelease:
-    PORTB = 0x01;
     break;
     
    default:
