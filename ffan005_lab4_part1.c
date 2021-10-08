@@ -19,11 +19,7 @@ enum States {onPress, onRelease, offPress, offRelease, Start} state;
 void Tick(){
   switch(state){
    case Start:
-    if((PINA & 0x00) == 0x00){
-     state = Start;
-    } else{
-    state = onPress;
-    }
+    state = offRelease;
     break;
     
    case onPress:
