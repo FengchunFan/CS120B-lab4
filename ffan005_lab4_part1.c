@@ -54,10 +54,11 @@ void Tick(){
     }
     break;
   
-   case default:
+   default:
     state = Start;
     break;
-    
+  }
+ 
   switch(state){
    case Start:
     PORTB = 0x01;
@@ -75,13 +76,13 @@ void Tick(){
     PORTB = 0x01;
     break;
     
-   case default:
+   default:
     PORTB = 0x01;
     break;
   }
 }
 
-int main(void){
+int main(void) {
 DDRA = 0x00; PORTA = 0xFF;
 DDRB = 0xFF; PORTB = 0x00;
   while (1) {
