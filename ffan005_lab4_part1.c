@@ -75,6 +75,10 @@ void Tick(){
    case offPress:
     PORTB = 0x01;
     break;
+ 
+   case offRelease:
+    PORTB = 0x01;
+    break;
     
    default:
     PORTB = 0x01;
