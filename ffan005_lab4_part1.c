@@ -24,9 +24,9 @@ void Tick(){
     
    case onPress:
     if((PINA & 0x01) == 0x01){
-     state = onRelease;
-    } else {
      state = onPress;
+    } else {
+     state = onRelease;
     }
     break;
     
@@ -40,9 +40,9 @@ void Tick(){
     
    case offPress:
     if((PINA & 0x01) == 0x01){
-     state = offRelease;
-    } else {
      state = offPress;
+    } else {
+     state = offRelease;
     }
     break;
     
@@ -69,6 +69,7 @@ void Tick(){
     break;
     
    case onRelease:
+    PORTB = 0x02;
     break;
     
    case offPress:
@@ -76,6 +77,7 @@ void Tick(){
     break;
  
    case offRelease:
+    PORTB = 0x01;
     break;
     
    default:
