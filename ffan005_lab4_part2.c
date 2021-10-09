@@ -16,35 +16,34 @@ enum States {Start, Initial, Press, Increment, Decrement, Temp1, Temp2, Reset} s
 
 void Tick() {
 	switch(state) {
-		case Start:
-			state = Initial;
-			break;
+	case Start:
+	 state = Initial;
+	break;
       
-		case Initial:
-			state = Press;
-			break;
-      
-		case Press:
-			if ((PINA & 0x01) == 0x01) {
-        state = Temp1;
+	case Initial:
+	 state = Press;
+	break;
+      	
+	case Press:
+	if ((PINA & 0x01) == 0x01) {
+         state = Temp1;
+      }	else if ((PINA & 0x02) == 0x02) {
+	state = Temp2;
       }
-			else if ((PINA & 0x02) == 0x02) {
-				state = Temp2;
-			}
-			else if ((PINA & 0x03) == 0x03) {
+	else if ((PINA & 0x03) == 0x03) {
         state = Reset;
-                        }
-			break;
+      }
+	break;
       
-		case Increment:
-			if ((PINA & 0x01) == 0x01) {
+      case Increment:
+      if ((PINA & 0x01) == 0x01) {
         state = Increment;
       }else {
         state = Press;
       }
       break;
 	
-		case Decrement:
+    case Decrement:
       if ((PINA & 0x02) == 0x02) {
       state = Decrement;
       } else {
@@ -53,64 +52,62 @@ void Tick() {
       break;
     
     case Reset:
-			if ((PINA & 0x03) == 0x03) {
-				state = Reset;
-			}
-			else {
-				state = Press;
-			}
-			break;
+    if ((PINA & 0x03) == 0x03) {
+	state = Reset;
+    }else {
+	state = Press;
+    }
+    break;
       
-		case Temp1:
-			state = Increment;
-			break;
-		case Temp2:
-			state = Decrement;
-			break;
+    case Temp1:
+	state = Increment;
+	break;
+    case Temp2:
+	state = Decrement;
+	break;
 			
-		default:
-			state = Start;
-			break;
-	}
+    default:
+	state = Start;
+    break;
+}
   
 	switch(state) {
-		case Start:
-			PORTC = 0x07;
-			break;
+	case Start:
+	 PORTC = 0x07;
+	break;
       
-		case Initial:
-			PORTC = 0x07;
-			break;
+	case Initial:
+	 PORTC = 0x07;
+	break;
+       
+	case Press:
+	break;
       
-		case Press:
-			break;
+	case Increment:
+	break;
       
-		case Increment:
-			break;
+	case Decrement:
+	break;
+              
+	case Reset:
+	 PORTC = 0x00;
+	break;
       
-		case Decrement:
-			break;
-      
-         
-		case Reset:
-			PORTC = 0x00;
-			break;
-      
-		case Temp1:
-			if (PORTC < 0x08) {
+	case Temp1:
+	if (PORTC < 0x08) {
         PORTC = PORTC + 1;
-			}
-      break;
+	}
+        break;
       
-		case Temp2:
-			if (PORTC > 0x00) { 
-        PORTC = PORTC - 1;
-			}
-     break;
+	case Temp2:
+	if (PORTC > 0x00) { 
+         PORTC = PORTC - 1;
+	}
+        break;
    
-		default:
-			PORTC = 0x07;
-			break;
+	default:
+	PORTC = 0x07;
+	break;
 	}
 }
 
