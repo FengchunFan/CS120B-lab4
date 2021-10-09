@@ -3,21 +3,85 @@
 #include "simAVRHeader.h"
 #endif
 
-enum States {} state;
+enum States {Start, Press, Increment, Decrement, Reset} state;
 
 void Tick(){
   switch(state){
-  
+    case Start:
+      state = Press;
+      break;
+      
+    case Press:
+      if((PINA & 0x01) == 0x01){
+        state = Increment;
+      } else if ((PINA & 0x02) == 0x02){
+        state = Decrement;
+      } else if ((PINA & 0x03) == 0x03){
+        state = Reset;
+      }
+     break;
+        
+    case Increment:
+      if((PINA & 0x01) == 0x01){
+        state = Increment;
+      } else {
+        state = Press;
+      }
+     break;
+      
+    case Decrement:
+      if((PINA & 0x02) == 0x02){
+        state = Decrement;
+      } else {
+        state = Press;
+      }
+     break;
+      
+    case Reset:
+      if((PINA & 0x03) == 0x03){
+        state = Reset;
+      } else {
+        state = Press;
+      }
+     break;
+      
+    default:
+      state = Start;
+      break;
   }
   
   switch(state){
-     
+    case Start:
+      PORTC = 0x07;
+      break;
+      
+    case Press:
+      break;
+      
+    case Increment:
+      if(PORTC <= 0x09){
+        PORTC = PORTC + 0x01;
+      }
+      break;
+      
+    case Decrement:
+      if(PORTC >= 0x00){
+        PORTC = PORTC - 0x01;
+      }
+      
+    case Reset:
+      PORTC = 0x00;
+      break;
+      
+    default:
+      PORTC = 0x07;
+      break;
   }
 }
 
 int main(void){
 DDRA = 0x00; PORTA = 0xFF;
-DDRB = 0xFF; PORTB = 0x00;
+DDRC = 0xFF; PORTC = 0x00;
   while (1) {
 Tick();
 }
