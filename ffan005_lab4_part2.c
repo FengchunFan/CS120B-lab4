@@ -5,83 +5,54 @@
 
 enum States {Start, Initial, Press, Increment, Decrement, Reset} state;
 
+
 void Tick(){
   switch(state){
     case Start:
       state = Initial;
-      PORTC = 0x07;
       break;
       
     case Initial:
       state = Press;
-      PORTC = 0x07;
       break;
       
     case Press:
       if((PINA & 0x01) == 0x01){
         state = Increment;
-        if(PORTC < 0x08){
-        PORTC = PORTC + 0x01;
-      }
       } else if ((PINA & 0x02) == 0x02){
         state = Decrement;
-        if(PORTC > 0x00){
-        PORTC = PORTC - 0x01;
-      }
       } else if ((PINA & 0x03) == 0x03){
         state = Reset;
-        PORTC = 0x00;
       }
      break;
         
     case Increment:
       if((PINA & 0x01) == 0x01){
         state = Increment;
-        if(PORTC < 0x08){
-        PORTC = PORTC + 0x01;
-      }
       } else if ((PINA & 0x02) == 0x02){
         state = Decrement;
-        if(PORTC > 0x00){
-        PORTC = PORTC - 0x01;
-      }
       } else if ((PINA & 0x03) == 0x03){
         state = Reset;
-        PORTC = 0x00;
       }
      break;
       
     case Decrement:
       if((PINA & 0x02) == 0x02){
         state = Decrement;
-        if(PORTC > 0x00){
-        PORTC = PORTC - 0x01;
-      }
       } else if ((PINA & 0x01) == 0x01){
         state = Increment;
-        if(PORTC < 0x08){
-        PORTC = PORTC + 0x01;
-      }
       } else if ((PINA & 0x03) == 0x03){
         state = Reset;
-        PORTC = 0x00;
       }
      break;
       
     case Reset:
       if((PINA & 0x03) == 0x03){
         state = Reset;
-        PORTC = 0x00;
       } else if ((PINA & 0x02) == 0x02){
         state = Decrement;
-        if(PORTC > 0x00){
-        PORTC = PORTC - 0x01;
-      }
       } else if ((PINA & 0x01) == 0x01){
         state = Increment;
-        if(PORTC < 0x08){
-        PORTC = PORTC + 0x01;
-      }
       }
      break;
       
@@ -91,7 +62,37 @@ void Tick(){
   }
   
   switch(state){
-  
+    case Start:
+      PORTC = 0x07;
+      break;
+      
+    case Initial:
+      PORTC = 0x07;
+      break;
+      
+    case Press:
+      break;
+      
+    case Increment:
+      if(PORTC < 0x08){
+        PORTC = PORTC + 0x01;
+      }
+      break;
+      
+    case Decrement:
+      if(PORTC > 0x00){
+        PORTC = PORTC - 0x01;
+      }
+     break;
+      
+    case Reset:
+      PORTC = 0x00;
+      break;
+      
+    default:
+      PORTC = 0x07;
+      break;
+  }
 }
 
 int main(void){
