@@ -3,7 +3,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum States {Start, Initial, Press, Increment, Decrement, Reset} state;
+enum States {Start, Initial, Press, Increment,Temp1, Decrement, Temp2, Reset} state;
 
 
 void Tick(){
@@ -18,9 +18,9 @@ void Tick(){
       
     case Press:
       if((PINA & 0x01) == 0x01){
-        state = Increment;
+        state = Temp1;
       } else if ((PINA & 0x02) == 0x02){
-        state = Decrement;
+        state = Temp2;
       } else if ((PINA & 0x03) == 0x03){
         state = Reset;
       }
@@ -28,9 +28,9 @@ void Tick(){
         
     case Increment:
       if((PINA & 0x01) == 0x01){
-        state = Increment;
+        state = Temp1;
       } else if ((PINA & 0x02) == 0x02){
-        state = Decrement;
+        state = Temp2;
       } else if ((PINA & 0x03) == 0x03){
         state = Reset;
       }
@@ -38,9 +38,9 @@ void Tick(){
       
     case Decrement:
       if((PINA & 0x02) == 0x02){
-        state = Decrement;
+        state = Temp2;
       } else if ((PINA & 0x01) == 0x01){
-        state = Increment;
+        state = Temp1;
       } else if ((PINA & 0x03) == 0x03){
         state = Reset;
       }
@@ -50,11 +50,19 @@ void Tick(){
       if((PINA & 0x03) == 0x03){
         state = Reset;
       } else if ((PINA & 0x02) == 0x02){
-        state = Decrement;
+        state = Temp2;
       } else if ((PINA & 0x01) == 0x01){
-        state = Increment;
+        state = Temp1;
       }
      break;
+      
+    case Temp1:
+      state = Increment;
+      break;
+      
+    case Temp2:
+      state = Decrement;
+      break;
       
     default:
       state = Start;
@@ -73,13 +81,13 @@ void Tick(){
     case Press:
       break;
       
-    case Increment:
+    case Temp1:
       if(PORTC < 0x08){
         PORTC = PORTC + 0x01;
       }
       break;
       
-    case Decrement:
+    case Temp2:
       if(PORTC > 0x00){
         PORTC = PORTC - 0x01;
       }
@@ -87,6 +95,12 @@ void Tick(){
       
     case Reset:
       PORTC = 0x00;
+      break;
+    
+    case Increment:
+      break;
+      
+    case Decrement:
       break;
       
     default:
