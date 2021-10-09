@@ -3,8 +3,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum States {Start, Initial, Press, Increment,Temp1, Decrement, Temp2, Reset} state;
-
+enum States {Start, Initial, Press, Increment, Decrement, Reset} state;
 
 void Tick(){
   switch(state){
@@ -18,9 +17,9 @@ void Tick(){
       
     case Press:
       if((PINA & 0x01) == 0x01){
-        state = Temp1;
+        state = Increment;
       } else if ((PINA & 0x02) == 0x02){
-        state = Temp2;
+        state = Decrement;
       } else if ((PINA & 0x03) == 0x03){
         state = Reset;
       }
@@ -29,35 +28,33 @@ void Tick(){
     case Increment:
       if((PINA & 0x01) == 0x01){
         state = Increment;
-      } else {
-        state = Press;
+      } else if ((PINA & 0x02) == 0x02){
+        state = Decrement;
+      } else if ((PINA & 0x03) == 0x03){
+        state = Reset;
       }
      break;
       
     case Decrement:
       if((PINA & 0x02) == 0x02){
         state = Decrement;
-      } else {
-        state = Press;
-      } 
+      } else if ((PINA & 0x01) == 0x01){
+        state = Increment;
+      } else if ((PINA & 0x03) == 0x03){
+        state = Reset;
+      }
      break;
       
     case Reset:
       if((PINA & 0x03) == 0x03){
         state = Reset;
-      } else {
-        state = Press;
+      } else if ((PINA & 0x02) == 0x02){
+        state = Decrement;
+      } else if ((PINA & 0x01) == 0x01){
+        state = Increment;
       }
      break;
       
-    case Temp1:
-      state = Increment;
-      break;
-      
-    case Temp2:
-      state = Decrement;
-      break;
-
     default:
       state = Start;
       break;
@@ -75,13 +72,13 @@ void Tick(){
     case Press:
       break;
       
-    case Temp1:
-      if(PORTC < 0x08){
+    case Increment:
+      if(PORTC < 0x09){
         PORTC = PORTC + 0x01;
       }
       break;
       
-    case Temp2:
+    case Decrement:
       if(PORTC > 0x00){
         PORTC = PORTC - 0x01;
       }
@@ -90,7 +87,7 @@ void Tick(){
     case Reset:
       PORTC = 0x00;
       break;
-    
+      
     default:
       PORTC = 0x07;
       break;
