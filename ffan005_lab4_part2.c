@@ -24,7 +24,7 @@ void Tick() {
 			state = Press;
 			break;
       
-		case Init:
+		case Press:
 			if ((PINA & 0x01) == 0x01) {
         state = Temp1;
       }
