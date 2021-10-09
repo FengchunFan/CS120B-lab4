@@ -9,10 +9,12 @@ void Tick(){
   switch(state){
     case Start:
       state = Initial;
+      PORTC = 0x07;
       break;
       
     case Initial:
       state = Press;
+      PORTC = 0x07;
       break;
       
     case Press:
@@ -89,21 +91,7 @@ void Tick(){
   }
   
   switch(state){
-    case Start:
-      PORTC = 0x07;
-      break;
-      
-    case Initial:
-      PORTC = 0x07;
-      break;
-      
-    case Press:
-      break;
-      
-    default:
-      PORTC = 0x07;
-      break;
-  }
+  
 }
 
 int main(void){
