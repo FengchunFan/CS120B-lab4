@@ -28,24 +28,30 @@ void Tick(){
     case Increment:
       if((PINA & 0x01) == 0x01){
         state = Increment;
-      } else {
-        state = Press;
+      } else if ((PINA & 0x02) == 0x02){
+        state = Decrement;
+      } else if ((PINA & 0x03) == 0x03){
+        state = Reset;
       }
      break;
       
     case Decrement:
       if((PINA & 0x02) == 0x02){
         state = Decrement;
-      } else {
-        state = Press;
+      } else if ((PINA & 0x01) == 0x01){
+        state = Increment;
+      } else if ((PINA & 0x03) == 0x03){
+        state = Reset;
       }
      break;
       
     case Reset:
       if((PINA & 0x03) == 0x03){
         state = Reset;
-      } else {
-        state = Press;
+      } else if ((PINA & 0x02) == 0x02){
+        state = Decrement;
+      } else if ((PINA & 0x01) == 0x01){
+        state = Increment;
       }
      break;
       
@@ -67,7 +73,7 @@ void Tick(){
       break;
       
     case Increment:
-      if(PORTC < 0x09){
+      if(PORTC < 0x08){
         PORTC = PORTC + 0x01;
       }
       break;
