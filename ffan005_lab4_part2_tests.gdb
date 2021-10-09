@@ -2,36 +2,63 @@ echo ======================================================\n
 echo Running all tests..."\n\n
 
 # Example test:
-test "PINA: 0x01, 0x01, 0x01, 0x01 => PORTB: 0x01, state: onPress"
-set state = start
-setPINA 0x01
+test "PINA: 0x00 => PORTC: 0x07, state: Press"
+set state = Start
+setPINA 0x00
 continue 2
-setPINA 0x01
-continue 2 
-setPINA 0x01
-continue 2
-setPINA 0x01
-continue 2
-expectPORTB 0x01
-expect state onPress
+expectPORTC 0x07
+expect state Press
 checkResult
 
-test "PINA: 0x01 => PORTB: 0x02, state: onRelease"
-set state = start
+# Example test:
+test "PINA: 0x00, 0x01 => PORTC: 0x08, state: Increment"
+set state = Start
+setPINA 0x00
+continue 2
 setPINA 0x01
 continue 2
-expectPORTB 0x02
-expect state onRelease
+expectPORTC 0x08
+expect state Increment
 checkResult
 
-test "PINA: 0x01, 0x01 => PORTB: 0x01, state: offPress"
-set state = start
+test "PINA: 0x00, 0x01, 0x02 => PORTC: 0x07, state: Decrement"
+set state = Start
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x02
+continue 2
+expectPORTC 0x07
+expect state Decrement
+checkResult
+
+test "PINA: 0x00, 0x01, 0x02, 0x03 => PORTC: 0x00, state: Reset"
+set state = Start
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x02
+continue 2
+setPINA 0x03
+continue2
+expectPORTC 0x00
+expect state Reset
+checkResult
+
+test "PINA: 0x00, 0x01, 0x01, 0x01 => PORTC: 0x09, state: Increment"
+set state = Start
+setPINA 0x00
+continue 2
 setPINA 0x01
 continue 2
 setPINA 0x01
-continue 2 
-expectPORTB 0x01
-expect state offPress
+continue 2
+setPINA 0x01
+continue 2
+expectPORTC 0x09
+expect state Increment
 checkResult
 
 # Add tests below
