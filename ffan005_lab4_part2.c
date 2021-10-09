@@ -26,9 +26,9 @@ void Tick(){
       }
      break;
         
-    /*case Increment:
+    case Increment:
       if((PINA & 0x01) == 0x01){
-        state = Temp1;
+        state = Increment;
       } else {
         state = Press;
       }
@@ -36,7 +36,7 @@ void Tick(){
       
     case Decrement:
       if((PINA & 0x02) == 0x02){
-        state = Temp2;
+        state = Decrement;
       } else {
         state = Press;
       } 
@@ -57,14 +57,7 @@ void Tick(){
     case Temp2:
       state = Decrement;
       break;
-      */
-      
-    case Temp1:
-      state = Press;
-    case Temp2:
-      state = Press;
-    case Reset:
-      state = Press;
+
     default:
       state = Start;
       break;
@@ -98,12 +91,6 @@ void Tick(){
       PORTC = 0x00;
       break;
     
-   /* case Increment:
-      break;
-      
-    case Decrement:
-      break;
-      */
     default:
       PORTC = 0x07;
       break;
