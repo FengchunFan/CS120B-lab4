@@ -54,6 +54,8 @@ void Tick(){
         state = Unlock;
       } else if ((PINA & 0x80) == 0x80){
         state = Locked;
+      } else if ((PORTB & 0x01) == 0x01){
+        state = Locked;
       } else {
         state = Step2;
       }
@@ -61,8 +63,6 @@ void Tick(){
     
     case Unlock:
       if((PINA & 0x80) == 0x80){
-        state = Locked;
-      } else if ((PORTB & 0x01) == 0x01){
         state = Locked;
       } else {
         state = Check;
