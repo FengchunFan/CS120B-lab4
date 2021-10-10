@@ -68,6 +68,7 @@ void Tick(){
       break;
       
     case Check:
+      PORTB = 0x00;
       break;
     
     case Locked:
@@ -75,13 +76,15 @@ void Tick(){
       break;
       
     case Step1:
+      PORTB = 0x00;
       break;
      
     case Step2:
+      PORTB = 0x00;
       break;
       
     case Unlock:
-      PORTB = 0x00;
+      PORTB = 0x01;
       break;
      
     default:
