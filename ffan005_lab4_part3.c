@@ -17,7 +17,7 @@ void Tick(){
 
 int main(void){
 DDRA = 0x00; PORTA = 0xFF;
-DDRC = 0xFF; PORTC = 0x00;
+DDRB = 0xFF; PORTB = 0x00;
   while (1) {
 Tick();
 }
