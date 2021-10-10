@@ -41,6 +41,7 @@ void Tick(){
       } else if ((PINA & 0x02) == 0x02){
         state = Decre;
       } else if ((PINA & 0x03) == 0x03){
+        PORTC = 0x00;
         state = Reset;
       }
      break;
@@ -51,6 +52,7 @@ void Tick(){
       } else if ((PINA & 0x01) == 0x01){
         state = Incre;
       } else if ((PINA & 0x03) == 0x03){
+        PORTC = 0x00;
         state = Reset;
       }
      break;
@@ -90,7 +92,7 @@ void Tick(){
       break;
       
     case Incre:
-      if(PORTC <= 0x09){
+      if(PORTC < 0x09){
         PORTC = PORTC + 1;
       } 
       break;
