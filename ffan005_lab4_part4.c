@@ -7,6 +7,7 @@
  *      I acknowledge all content contained herein, excluding template or example
  *      code, is my own original work.
  */
+
 #include <avr/io.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
@@ -77,7 +78,6 @@ void Tick(){
       break;
       
     case Check:
-      PORTB = 0x00;
       break;
     
     case Locked:
@@ -85,11 +85,9 @@ void Tick(){
       break;
       
     case Step1:
-      PORTB = 0x00;
       break;
      
     case Step2:
-      PORTB = 0x00;
       break;
       
     case Unlock:
