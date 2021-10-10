@@ -7,6 +7,7 @@
  *      I acknowledge all content contained herein, excluding template or example
  *      code, is my own original work.
  */
+
 #include <avr/io.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
@@ -41,20 +42,16 @@ void Tick(){
     case Step1: // anohter # pressed
       if((PINA & 0x07) == 0x04){
         state = Step2;
-      } else if ((PINA & 0x80) == 0x80){
-        state = Locked;
       } else {
-        state = Step1;
+        state = Locked;
       }
       break;
       
      case Step2: // Y pressed
       if((PINA & 0x07) == 0x02){
         state = Unlock;
-      } else if ((PINA & 0x80) == 0x80){
-        state = Locked;
       } else {
-        state = Step2;
+        state = Locked;
       }
       break;
     
@@ -77,7 +74,6 @@ void Tick(){
       break;
       
     case Check:
-      PORTB = 0x00;
       break;
     
     case Locked:
@@ -85,11 +81,9 @@ void Tick(){
       break;
       
     case Step1:
-      PORTB = 0x00;
       break;
      
     case Step2:
-      PORTB = 0x00;
       break;
       
     case Unlock:
