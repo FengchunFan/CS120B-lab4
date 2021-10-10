@@ -10,66 +10,65 @@
 //After continuly failing half of the tests, I got some help from the TA
 
 
+
 #include <avr/io.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
 #endif
 
-enum States {Start, Initial, Press, Increment, Decre, Decrement, Reset} state;
+enum States {Start, Check, Locked, Step1, Step2, Unlock} state;
 
 void Tick(){
   switch(state){
     case Start:
-      state = Initial;
+      state = Check;
       break;
       
-    case Initial:
-      state = Press;
+    case Check:
+       if((PINA & 0x80) == 0x80){
+        state = Locked;
+       } else if ((PINA & 0x07) == 0x04){ //if only # pressed
+        state = Step1;
+       } else {
+        state = Check;
+       }
       break;
       
-    case Press:
-      if((PINA & 0x01) == 0x01){
-        state = Increment;
-      } else if ((PINA & 0x02) == 0x02){
-        state = Decre;
-      } else if ((PINA & 0x03) == 0x03){
-        state = Reset;
+    case Locked:
+      if((PINA & 0x80) == 0x80){
+        state = Locked;
+      } else {
+        state = Check;
       }
-     break;
-        
-    case Increment:
-      if((PINA & 0x01) == 0x01){
-        state = Increment;
-      } else if ((PINA & 0x02) == 0x02){
-        state = Decre;
-      } else if ((PINA & 0x03) == 0x03){
-        state = Reset;
-      }
-     break;
-      
-    case Decrement:
-      if((PINA & 0x02) == 0x02){
-        state = Decrement;
-      } else if ((PINA & 0x01) == 0x01){
-        state = Increment;
-      } else if ((PINA & 0x03) == 0x03){
-        state = Reset;
-      }
-     break;
-      
-    case Decre:
-      state = Decrement;
       break;
       
-    case Reset:
-      if((PINA & 0x03) == 0x03){
-        state = Reset;
-      } else if ((PINA & 0x02) == 0x02){
-        state = Decre;
-      } else if ((PINA & 0x01) == 0x01){
-        state = Increment;
+    case Step1: // anohter # pressed
+      if((PINA & 0x07) == 0x04){
+        state = Step2;
+      } else if ((PINA & 0x80) == 0x80){
+        state = Locked;
+      } else {
+        state = Step1;
       }
-     break;
+      break;
+      
+     case Step2: // Y pressed
+      if((PINA & 0x07) == 0x02){
+        state = Unlock;
+      } else if ((PINA & 0x80) == 0x80){
+        state = Locked;
+      } else {
+        state = Step2;
+      }
+      break;
+    
+    case Unlock:
+      if((PINA & 0x80) == 0x80){
+        state = Locked;
+      } else {
+        state = Check;
+      }
+      break;
       
     default:
       state = Start;
@@ -78,48 +77,37 @@ void Tick(){
   
   switch(state){
     case Start:
-      PORTC = 0x07;
+      PORTB = 0x00;
       break;
       
-    case Initial:
-      PORTC = 0x07;
+    case Check:
+      PORTB = 0x00;
+      break;
+    
+    case Locked:
+      PORTB = 0x00;
       break;
       
-    case Press:
+    case Step1:
+      PORTB = 0x00;
+      break;
+     
+    case Step2:
+      PORTB = 0x00;
       break;
       
-    case Increment:
-      if(PORTC < 0x08){
-        PORTC = PORTC + 1;
-      } else {
-        PORTC = 0x08;
-      }
+    case Unlock:
+      PORTB = 0x01;
       break;
-      
-    case Decrement:
-      break;
-      
-    case Decre:
-      if(PORTC > 0x00){
-        PORTC = PORTC - 1;
-      }else{
-        PORTC = 0x00;
-      }
-     break;
-      
-    case Reset:
-      PORTC = 0x00;
-      break;
-      
+     
     default:
-      PORTC = 0x07;
       break;
   }
 }
 
 int main(void){
 DDRA = 0x00; PORTA = 0xFF;
-DDRC = 0xFF; PORTC = 0x00;
+DDRB = 0xFF; PORTB = 0x00;
   while (1) {
 Tick();
 }
