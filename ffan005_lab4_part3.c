@@ -81,7 +81,7 @@ void Tick(){
       break;
       
     case Unlock:
-      PORTB = 0x01;
+      PORTB = 0x00;
       break;
      
     default:
