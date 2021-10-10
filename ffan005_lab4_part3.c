@@ -53,7 +53,7 @@ void Tick(){
       if((PINA & 0x80) == 0x80){
         state = Locked;
       } else {
-        state = check;
+        state = Check;
       }
       break;
       
